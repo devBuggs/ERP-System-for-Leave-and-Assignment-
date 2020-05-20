@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>{% block title %}{% endblock %}</title>
+		<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+		
+	</head>
+	<body class="loggedin">
+		<nav class="navtop">
+			<div>
+				<h1 style="font-family: dosis;">ERP System</h1>
+                <a href="{{ url_for('home') }}"><i class="fas fa-home"></i>Home</a>
+				<a href="{{ url_for('profile') }}"><i class="fas fa-user-circle"></i>Profile</a>
+				<a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i>Logout</a>
+			</div>
+		</nav>
+		<div class="content">
+			{% block content %}{% endblock %}
+			
+			<section draggable="true">
+				<nav class="navtop">
+					<div>
+						<h1 style="font-family: dosis; padding-left: 10px;">Leave Management</h1>
+						<a href="{{ url_for('leaveApprove') }}"><i class="fas fa-check-circle"></i>Approved</a>
+						<a href="{{ url_for('leavePending') }}"><i class="fas fa-exclamation"></i>Pending</a>
+						<a href="{{ url_for('leaveRejected') }}"><i class="fas fa-ban"></i>Rejected</a>
+					</div>
+				</nav>
+			</section>
+			<hr>				
+			<section draggable="true">
+				<nav class="navtop">
+					<div>
+						<h1 style="font-family: dosis; padding-left: 10px;">Assignment Management</h1>
+						<a href="{{ url_for('assignmentCreate') }}"><i class="fas fa-plus"></i>Create</a>
+						<a href="{{ url_for('assignmentUpdate') }}"><i class="fas fa-edit"></i>Update</a>
+						<a href="{{ url_for('assignmentDelete') }}"><i class="fas fa-trash"></i>Delete</a>
+					</div>
+				</nav>
+			</section>
+			<hr>
+			<section draggable="true">
+				<nav class="navtop">
+					<div>
+						<h1 style="font-family: dosis; padding-left: 10px;">Student Report</h1>
+						<a href="{{ url_for('allStudents') }}"><i class="fas fa-edit"></i>Students</a>
+						<a href="{{ url_for('reportUpdate') }}"><i class="fas fa-edit"></i>Update</a>
+						<a href="{{ url_for('reportDownload') }}"><i class="fas fa-file-download"></i>Download</a>
+						<a href="{{ url_for('reportReset') }}"><i class="fab fa-rev"></i>Reset</a>
+					</div>
+				</nav>
+			</section>
+			<hr>
+			<footer>
+				<div style="margin-top:75px; padding-right:58px; margin-bottom: 30px;">
+					<p>Developed by <a href="https://ecorpin.com/team.html" title="Ecorpin developers" target="_blank" class="w3-hover-opacity">Bhagwan Singh</a></p>
+				</div>
+			</footer>
+		</div>
+	</body>
+</html>

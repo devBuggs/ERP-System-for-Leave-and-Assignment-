@@ -1,0 +1,39 @@
+{% extends 'layout.html' %}
+
+{% block title %}ERP System{% endblock %}
+
+{% block content %}
+<h2>Assignment Creation Wizard!</h2>
+<div>
+    <table>
+        <form action="" method="POST" >
+            <tr>
+                <td>Assignment Name</td>
+                <td><input type="text" placeholder="enter assignment title" maxlength="80"></td>
+            </tr>
+            <tr>
+                <td>Submission Date</td>
+                <td><input type="date" placeholder="enter date in dd-mm-yyyy formate"></td>
+            </tr>
+            <tr>
+                <td>Subject</td>
+                <td><input type="text" placeholder="enter subject name" ></td>
+            </tr>
+            <tr>
+                <td>Message / NOTE</td>
+                <td><input type="text" placeholder="enter any important message" ></td>
+            </tr>
+            <tr>
+                <td>Upload docs</td>
+                <td><input type="file"></td>
+            </tr>
+            <tr>
+                <td><span hidden></span></td>
+                <td><button type="submit" style="padding: 5px; border:hidden;">SUBMIT</button></td>
+            </tr>
+        </form>
+    </table>
+</div>
+
+
+{% endblock %}
