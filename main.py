@@ -20,6 +20,7 @@ def leaveApprove():
 @app.route("/home/leave-Pending")
 def leavePending():
     return ("<h1>Leave Pending Fragment!</h1>")
+    return ("<div><h1>Leave Pending Fragment!</h1></div")
 
 @app.route("/home/leave-Rejected")
 def leaveRejected():
