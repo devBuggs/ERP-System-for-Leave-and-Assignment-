@@ -4,7 +4,7 @@ import re
 
 app =Flask(__name__)
 
-# Change this to your secret key (can be anything, it's for extra protection)
+# Change this to your secret key (can be anything, it's for extra protection of the application)
 app.secret_key = os.urandom(24)
 
 
@@ -68,7 +68,6 @@ def login():
         # Create variables for easy access
         username = request.form['username']
         password = request.form['password']
-        # Check if account exists using MySQL
         # opening database sqlite3
         db = sqlite3.connect("project.sqlite3")
         #getcursor object it is responsible for handling database query
@@ -133,7 +132,7 @@ def register():
             msg = 'Please fill out the form!'
         else:
             # Account doesnt exists and the form data is valid, now insert new account into accounts table
-            cursor.execute('INSERT INTO users VALUES (none, ?, ?, ?)', (username, password, email,))
+            cursor.execute('INSERT INTO users VALUES (?, ?, ?, ?)', ('' ,username, password, email,))
             db.commit()
             db.close()
             msg = 'You have successfully registered!'
@@ -169,11 +168,14 @@ def profile():
         
         account = cursor.fetchone()
         db.commit()
+        
+        #close the database connection
         db.close()
         # Show the profile page with account info
         return render_template('profile.html', account=account)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
+
 
 
 if __name__ == "__main__":
