@@ -8,15 +8,27 @@ app =Flask(__name__)
 # Change this to your secret key (can be anything, it's for extra protection of the application)
 app.secret_key = os.urandom(24)
 
-
 @app.route("/")
 def main():
     return render_template('index.html')
 
 # Leave module routing functions
-@app.route("/home/leave-Approve")
-def leaveApprove():
-    return ("<h1>Leave Approve Fragment!</h1>")
+@app.route("/home/leave-Approved")
+def leaveApproved():
+    '''
+    status = 'approved'
+    if request.method == 'POST':
+        db = sqlite3.connect("project.sqlite3")
+        #getcursor object it is responsible for handling database query
+        cursor = db.cursor()
+        #Execute database query
+        cursor.execute('SELECT * FROM leaveApproved WHERE status = ?', (status))
+        # Fetch one record and return result
+        account = cursor.fetchall()
+
+        db.close()
+    '''
+    return ("<h1>Leave Approved Fragment!</h1>")
 
 @app.route("/home/leave-Pending")
 def leavePending():
@@ -25,6 +37,10 @@ def leavePending():
 @app.route("/home/leave-Rejected")
 def leaveRejected():
     return ("<h1>Leave Rejected Fragment!</h1>")
+
+@app.route("/leaveApply")
+def leaveApply():
+    return render_template('leaveApply.html')
 
 # Assignment module routing functions
 @app.route("/home/assignment-Create")
@@ -75,7 +91,9 @@ def login():
         cursor = db.cursor()
 
         #Execute database query
-        cursor.execute('SELECT * FROM users WHERE username = ? AND password = ?', (username, password,))
+        cursor.execute('SELECT * FROM userinfo WHERE username = ? AND password = ?', (username, password,))
+        
+        ####cursor.execute('SELECT * FROM userinfo INNER JOIN studentinfo ON studentinfo.student_id=userinfo.student_id where username=? AND password=?', (username, password))
         # Fetch one record and return result
         account = cursor.fetchone()
         db.close()
@@ -86,6 +104,13 @@ def login():
             #session['id'] = account['userid']
             session['id'] = account[0]
             session['username'] = account[1]
+
+            #checking usertype
+            if account[4] == "faculty":
+                return ("<h1>Faculty Dashboard</h1>")
+
+            elif account[4] == "student":
+                return("<h1>Student dashboard</h1>")
             # Redirect to home page
             # return 'Logged in successfully!'
             return redirect(url_for('home'))
@@ -178,8 +203,6 @@ def profile():
         return render_template('profile.html', account=account)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
-
-
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -1,0 +1,39 @@
+{% extends 'layout.html' %}
+
+{% block title %}leave apply{% endblock %}
+
+{% block content %}
+<h2>Leave Request Wizard!</h2>
+<div>
+    <table>
+        <form action="" method="POST">
+            <tr>
+                <td>Applicant Name</td>
+                <td><input type="text" placeholder="enter your name" maxlength="80" required></td>
+            </tr>
+            <tr>
+                <td>Email Address</td>
+                <td><input type="email" placeholder="enter your registered email" required></td>
+            </tr>
+            <tr>
+                <td>Leave Reason</td>
+                <td><input type="text" placeholder="enter leave reason.."></td>
+            </tr>
+            <tr>
+                <td>Leave from </td>
+                <td><input type="date" placeholder="dd-mm-yyyy"></td>
+            </tr>
+            <tr>
+                <td>Till date</td>
+                <td><input type="date" placeholder="dd-mm-yyyy"></td>
+            </tr>
+            <tr>
+                <td><span hidden></span></td>
+                <td><button type="submit" style="padding: 5px; border:hidden;">SUBMIT</button></td>
+            </tr>
+        </form>
+    </table>
+</div>
+
+
+{% endblock %}

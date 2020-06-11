@@ -22,8 +22,9 @@
 			<section draggable="true">
 				<nav class="navtop">
 					<div>
-						<h1 style="font-family: dosis; padding-left: 10px;">Leave Management</h1>
-						<a href="{{ url_for('leaveApprove') }}"><i class="fas fa-check-circle"></i>Approved</a>
+						<h1 style="font-family: dosis; padding-left: 10px;">Leave Management</h1>						
+						<a href="{{ url_for('leaveApply') }}"><i class="fas fa-plus"></i>Apply</a>
+						<a href="{{ url_for('leaveApproved') }}"><i class="fas fa-check-circle"></i>Approved</a>
 						<a href="{{ url_for('leavePending') }}"><i class="fas fa-exclamation"></i>Pending</a>
 						<a href="{{ url_for('leaveRejected') }}"><i class="fas fa-ban"></i>Rejected</a>
 					</div>
