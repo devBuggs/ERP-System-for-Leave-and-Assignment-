@@ -5,19 +5,27 @@
 {% block content %}
 <h2>Profile Page</h2>
 <div>
-    <p>Your account details are below:</p>
+    <p>Your account details are here! {{ account['username']}}</p>
     <table>
         <tr>
+            <td>UserID:</td>
+            <td>{{ account[0] }}</td>
+        </tr>
+        <tr>
             <td>Username:</td>
-            <td>{{ account['username'] }}</td>
+            <td>{{ account[1] }}</td>
         </tr>
         <tr>
             <td>Password:</td>
-            <td>{{ account['password'] }}</td>
+            <td>{{ account[2] }}</td>
         </tr>
         <tr>
             <td>Email:</td>
-            <td>{{ account['email'] }}</td>
+            <td>{{ account[3] }}</td>
+        </tr>
+        <tr>
+            <td>Access-Type:</td>
+            <td>{{ account[4] }}</td>
         </tr>
     </table>
 </div>

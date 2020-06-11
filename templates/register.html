@@ -26,6 +26,14 @@
 					<i class="fas fa-envelope"></i>
 				</label>
 				<input type="email" name="email" placeholder="Email" id="email" required>
+				<label for="user-type">
+					<i class="fas fa-users-cog"></i>
+				</label>
+				<select name="accesstype" id="usertype" placeholder="select access type" required>
+					<option value="Student">Student Access</option>
+					<option value="faculty">Faculty Access</option>
+					<option value="Management">Coordinator Access</option>
+				</select>
 				<div class="msg">{{ msg }}</div>
 				<input type="submit" value="Register">
 			</form>

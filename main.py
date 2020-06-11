@@ -1,6 +1,7 @@
 from flask import Flask, render_template, redirect, url_for, request, session
 import sqlite3, os
 import re
+import random
 
 app =Flask(__name__)
 
@@ -19,7 +20,6 @@ def leaveApprove():
 
 @app.route("/home/leave-Pending")
 def leavePending():
-    return ("<h1>Leave Pending Fragment!</h1>")
     return ("<div><h1>Leave Pending Fragment!</h1></div")
 
 @app.route("/home/leave-Rejected")
@@ -116,6 +116,7 @@ def register():
         username = request.form['username']
         password = request.form['password']
         email = request.form['email']
+        usertype = request.form['accesstype'] 
         # Check if account exists using MySQL
         db = sqlite3.connect("project.sqlite3")
         cursor = db.cursor()
@@ -132,8 +133,9 @@ def register():
         elif not username or not password or not email:
             msg = 'Please fill out the form!'
         else:
+            userid = random.randrange(999999)
             # Account doesnt exists and the form data is valid, now insert new account into accounts table
-            cursor.execute('INSERT INTO users VALUES (?, ?, ?, ?)', ('' ,username, password, email,))
+            cursor.execute('INSERT INTO users VALUES (?, ?, ?, ?, ?)', (userid,username, password, email, usertype))
             db.commit()
             db.close()
             msg = 'You have successfully registered!'
@@ -155,7 +157,7 @@ def home():
     return redirect(url_for('login'))
 
 # http://localhost/login/profile - this will be the profile page, only accessible for logged-in users
-@app.route('/login/profile')
+@app.route('/login/profile', methods = ['POST', 'GET'])
 def profile():
     account = []
     # Check if user is loggedin
