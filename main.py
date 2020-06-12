@@ -24,9 +24,10 @@ def leavePending():
 def leaveRejected():
     return ("<h1>Leave Rejected Fragment!</h1>")
 
-@app.route("/leaveApply")
+@app.route("/login/leaveApply", methods=['GET', 'POST'])
 def leaveApply():
-    if request.method == 'POST' and 'leave_from' in request.form and 'leave_upto' in request.form and 'leave_resion' in request.form:
+    msg = 'Leave request is successfully submitted'
+    if request.method == 'POST' and 'leave_from' in request.form and 'leave_upto' in request.form and 'leave_reason' in request.form:
         # Create variables for easy access
         leaveFrom = request.form['leave_from']
         leaveUpto = request.form['leave_upto']
@@ -36,15 +37,31 @@ def leaveApply():
         #get cursor object it is responsible for handling database query
         cursor = db.cursor()
         #Execute database query
-        cursor.execute('INSERT INTO leaveinfo(leave_from, leave_upto, reason) VALUES(?,?,?)', (leaveFrom, leaveUpto, leaveReason))
+        cursor.execute('INSERT INTO leaveinfo(leave_from, leave_upto, reason) VALUES(?,?,?)', (leaveFrom, leaveUpto, leaveReason),)
         db.commit()
         db.close()
+        print(cursor.lastrowid)
+        print('Yeeeepppppppppppppppppppeeeeeeeeeee')
+        return render_template('leaveApply.html', msg = msg)
         #corrently working.......
     return render_template('leaveApply.html')
 
 @app.route("/leaveStatus")
 def leaveStatus():
-    return("<h1>Leave Status</h1>")
+    data=[]
+    if 'loggedin' in session:
+        user = session['id']
+        #print(user)
+        # We need all the leave info. for the user so we can display it on the view assignment page
+        db = sqlite3.connect("project.sqlite3")
+        cursor = db.cursor()
+        cursor.execute('SELECT leaveinfo.* FROM leaveinfo INNER JOIN userinfo ON userinfo.student_id = leaveinfo.student_id where userinfo.user_id=?',(user,))
+        data = cursor.fetchall()
+        print(data) #for testing purpose.. in CONSOLEs
+        db.close()
+        if data == None:
+            return render_template('leaveStatus.html', data=data)
+    return render_template('leaveStatus.html', data=data)
 
 @app.route("/home/assignment-Create")
 def assignmentCreate():
@@ -67,10 +84,40 @@ def viewAssignment():
             return render_template('viewAssignment.html', data=data)
     return render_template('viewAssignment.html', data=data)
 
-@app.route("/login/downloadFile")
-def downloadFile():
-    print("downloaded.....")
-    return("<h1>Assignment file</h1>")
+@app.route("/login/downloadFile/<assign_id>", methods=['GET'])
+def downloadFile(assign_id):
+    print("In downloadFile function")
+    if request.method == 'GET':
+        # print(assign_id)
+        try:
+            db = sqlite3.connect("project.sqlite3")
+            cursor = db.cursor()
+            cursor.execute('SELECT * from assignmentinfo where assignment_id = ?', (assign_id,))
+            data = cursor.fetchone()
+            file_data = data[1]
+            if assign_id == '1':
+                file_name = 'download.jpg'
+            elif assign_id == '2':
+                file_name = 'download.docx'
+            elif assign_id == '3':
+                file_name = 'download.pdf'
+            else:
+                file_name = 'download'
+            file_path = os.getcwd() + '\\' + file_name
+            with open(file_name, 'wb') as file:
+                file.write(file_data)
+            # full_path = os.path.join(os.getcwd(), 'download.jpg')
+
+        except sqlite3.Error as error:
+            print('Failed')
+
+        finally:
+            if(db):
+                db.close()
+
+    # msg = 'Assignment file downloaded at location C:/Users/Downloads'
+    return("<h2>Assignment file downloaded at location "+ file_path +"</h2>")
+    # return redirect(url_for('viewAssignment'))
 
 @app.route("/home/assignment-Update")
 def assignmentUpdate():

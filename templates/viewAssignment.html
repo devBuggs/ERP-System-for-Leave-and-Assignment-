@@ -6,7 +6,9 @@
 <h2>Assignments Wizard!</h2>
 {% if data %}
 <div>
+<ul>
 {% for tuple in data %}
+    <li>
     <table>{{ error }}
         <tr>
             <td>Title:</td>
@@ -34,11 +36,13 @@
         </tr>
         <tr>
             <td>Attachment:</td>
-            <td><button href="{{ url_for('downloadFile') }}"><i class="fa fa-download"></i> {{ "Download File" }}</button></td>
+            <td><a href="/login/downloadFile/{{ tuple[0] }}"><button><i class="fa fa-download"></i>{{ "Download File" }}</button></a></td>
         </tr>
     </table>
     <hr>
+    </li>
 {% endfor %}
+</ul>
 </div>
 {% else %}
 <div>

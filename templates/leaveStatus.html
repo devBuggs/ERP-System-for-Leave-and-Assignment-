@@ -1,0 +1,41 @@
+{% extends 'layout1.html' %}
+
+{% block title %}Leave Status{% endblock %}
+
+{% block content %}
+<h2>Track leave application!</h2>
+{% if data %}
+<div>
+{% for tuple in data %}
+    <table>{{ error }}
+        <tr>
+            <td>Leave From:</td>
+            <td>{{ tuple[1] }}</td>
+        </tr>
+        <tr>
+            <td>Leave Upto:</td>
+            <td>{{ tuple[2] }}</td>
+        </tr>
+        <tr>
+            <td>Reason:</td>
+            <td>{{ tuple[3] }}</td>
+        </tr>   
+        <tr>
+            <td>Status:</td>                
+            <td>{% if tuple[5] == '1' %}
+                    <b>Leave approved <i class="fas fa-thumbs-up"></i></b>
+                {% else %}
+                    <b>pending <i class="fas fa-exclamation"></i></b>
+                {% endif %}
+            </td>
+        </tr>                                  
+    </table>
+    <hr>
+{% endfor %}
+</div>
+{% else %}
+<div>
+    <b>No leave application found...</b>
+</div>
+{% endif %}
+{% endblock %}
