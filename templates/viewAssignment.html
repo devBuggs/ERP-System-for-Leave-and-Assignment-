@@ -1,0 +1,45 @@
+{% extends 'layout1.html' %}
+
+{% block title %}Assignments{% endblock %}
+
+{% block content %}
+<h2>Assignments Wizard!</h2>
+<div>
+    <table>{{ error }}
+        <tr>
+            <td>Assignment ID:</td>
+            <td>{{ data[0] }}</td>
+        </tr>
+        <tr>
+            <td>Title:</td>
+            <td>{{ data[1] }}</td>
+        </tr>
+        <tr>
+            <td>Class:</td>
+            <td>{{ data[2] }}</td>
+        </tr>
+        <tr>
+            <td>Assigned by:</td>
+            <td>{{ data[3] }}</td>
+        </tr>
+        <tr>
+            <td>Submission date:</td>
+            <td>{{ data[4] }}</td>
+        </tr>
+        <tr>
+            <td>Assigned date:</td>
+            <td>{{ data[5] }}</td>
+        </tr>
+        <tr>
+            <td>Instruction:</td>
+            <td>{{ data[6] }}</td>
+        </tr>
+        <tr>
+            <td>Attachment:</td>
+            <td>{{ data[7] }}</td>
+        </tr>
+    </table>
+</div>
+
+
+{% endblock %}

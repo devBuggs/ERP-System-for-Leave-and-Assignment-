@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>{% block title %}{% endblock %}</title>
+		<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+		
+	</head>
+	<body class="loggedin">
+		<nav class="navtop">
+			<div>
+				<h1 style="font-family: dosis;">ERP System</h1>
+                <a href="{{ url_for('home') }}"><i class="fas fa-home"></i>Home</a>
+				<a href="{{ url_for('profile') }}"><i class="fas fa-user-circle"></i>Profile</a>
+				<a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i>Logout</a>
+			</div>
+		</nav>
+		<div class="content">
+			{% block content %}{% endblock %}
+			
+			<section draggable="true">
+				<nav class="navtop">
+					<div>
+						<h1 style="font-family: dosis; padding-left: 10px;">Assignment</h1>
+						<a href="{{ url_for('viewAssignment') }}" title="view all assignments.."><i class="fas fa-plus"></i>Show All</a>
+					</div>
+				</nav>
+			</section>
+			<hr>				
+			<section draggable="true">
+				<nav class="navtop">
+					<div>
+						<h1 style="font-family: dosis; padding-left: 10px;">Leave Management</h1>						
+						<a href="{{ url_for('leaveApply') }}" title="apply for leave.."><i class="fas fa-plus"></i>Apply</a>
+						<a href="{{ url_for('leaveStatus') }}" title="Track your leave application.."><i class="fas fa-check-circle"></i>Status</a>
+					</div>
+				</nav>
+			</section>
+			<hr>
+			<footer>
+				<div style="margin-top:75px; padding-right:58px; margin-bottom: 30px;" title="Developer's">
+					<p><i class="fas fa-terminal"></i> devBuggs</p>
+				</div>
+			</footer>
+		</div>
+	</body>
+</html>

@@ -8,7 +8,7 @@
 	</head>
 	<body>
 		<div class="register">
-			<h1>Register</h1>
+			<h1>Student Registration</h1>
 			<div class="links">
 				<a href="{{ url_for('login') }}">Login</a>
 				<a href="{{ url_for('register') }}" class="active">Register</a>
@@ -26,7 +26,11 @@
 					<i class="fas fa-envelope"></i>
 				</label>
 				<input type="email" name="email" placeholder="Email" id="email" required>
-				<label for="user-type">
+				<label for="student_id">
+					<i class="fas fa-users-cog"></i>
+				</label>
+				<input type="text" name="student_id" placeholder="Student ID" id="student_id" required>
+<!-- 				<label for="user-type">
 					<i class="fas fa-users-cog"></i>
 				</label>
 				<select name="accesstype" id="usertype" placeholder="select access type" required>
@@ -34,7 +38,7 @@
 					<option value="faculty">Faculty Access</option>
 					<option value="Management">Coordinator Access</option>
 				</select>
-				<div class="msg">{{ msg }}</div>
+ -->				<div class="msg">{{ msg }}</div>
 				<input type="submit" value="Register">
 			</form>
 		</div>

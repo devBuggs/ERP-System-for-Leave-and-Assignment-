@@ -1,4 +1,4 @@
-{% extends 'layout.html' %}
+{% extends 'layout1.html' %}
 
 {% block title %}leave apply{% endblock %}
 
@@ -8,24 +8,20 @@
     <table>
         <form action="" method="POST">
             <tr>
-                <td>Applicant Name</td>
-                <td><input type="text" placeholder="enter your name" maxlength="80" required></td>
+                <td>Leave ID:</td>
+                <td><input type="text" placeholder="enter leave id" maxlength="80" required></td>
             </tr>
             <tr>
-                <td>Email Address</td>
-                <td><input type="email" placeholder="enter your registered email" required></td>
+                <td>Leave from</td>
+                <td><input type="date" placeholder="yyyy-mm-dd" required></td>
+            </tr>
+            <tr>
+                <td>Leave upto</td>
+                <td><input type="date" placeholder="dd-mm-yyyy"></td>
             </tr>
             <tr>
                 <td>Leave Reason</td>
                 <td><input type="text" placeholder="enter leave reason.."></td>
-            </tr>
-            <tr>
-                <td>Leave from </td>
-                <td><input type="date" placeholder="dd-mm-yyyy"></td>
-            </tr>
-            <tr>
-                <td>Till date</td>
-                <td><input type="date" placeholder="dd-mm-yyyy"></td>
             </tr>
             <tr>
                 <td><span hidden></span></td>
