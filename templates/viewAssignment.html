@@ -4,42 +4,45 @@
 
 {% block content %}
 <h2>Assignments Wizard!</h2>
+{% if data %}
 <div>
+{% for tuple in data %}
     <table>{{ error }}
         <tr>
-            <td>Assignment ID:</td>
-            <td>{{ data[0] }}</td>
-        </tr>
-        <tr>
             <td>Title:</td>
-            <td>{{ data[1] }}</td>
+            <td>{{ tuple[2] }}</td>
         </tr>
         <tr>
-            <td>Class:</td>
-            <td>{{ data[2] }}</td>
+            <td>Subject:</td>
+            <td>{{ tuple[9] }}</td>
         </tr>
         <tr>
             <td>Assigned by:</td>
-            <td>{{ data[3] }}</td>
-        </tr>
-        <tr>
-            <td>Submission date:</td>
-            <td>{{ data[4] }}</td>
+            <td>{{ tuple[8] }}</td>
         </tr>
         <tr>
             <td>Assigned date:</td>
-            <td>{{ data[5] }}</td>
+            <td>{{ tuple[3] }}</td>
+        </tr>
+        <tr>
+            <td>Submission date:</td>
+            <td>{{ tuple[4] }}</td>
         </tr>
         <tr>
             <td>Instruction:</td>
-            <td>{{ data[6] }}</td>
+            <td>{{ tuple[5] }}</td>
         </tr>
         <tr>
             <td>Attachment:</td>
-            <td>{{ data[7] }}</td>
+            <td><button href="{{ url_for('downloadFile') }}"><i class="fa fa-download"></i> {{ "Download File" }}</button></td>
         </tr>
     </table>
+    <hr>
+{% endfor %}
 </div>
-
-
+{% else %}
+<div>
+    <b>No assignments available</b>
+</div>
+{% endif %}
 {% endblock %}

@@ -4,24 +4,20 @@
 
 {% block content %}
 <h2>Leave Request Wizard!</h2>
-<div>
+<div> {{ msg }}
     <table>
         <form action="" method="POST">
             <tr>
-                <td>Leave ID:</td>
-                <td><input type="text" placeholder="enter leave id" maxlength="80" required></td>
-            </tr>
-            <tr>
                 <td>Leave from</td>
-                <td><input type="date" placeholder="yyyy-mm-dd" required></td>
+                <td><input type="text" name="leave_from" placeholder="yyyy-mm-dd" required></td>
             </tr>
             <tr>
                 <td>Leave upto</td>
-                <td><input type="date" placeholder="dd-mm-yyyy"></td>
+                <td><input type="text" name="leave_upto" placeholder="yyyy-mm-dd" required></td>
             </tr>
             <tr>
                 <td>Leave Reason</td>
-                <td><input type="text" placeholder="enter leave reason.."></td>
+                <td><input type="text" name="leave_reason" placeholder="enter leave reason.." required></td>
             </tr>
             <tr>
                 <td><span hidden></span></td>

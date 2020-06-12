@@ -26,6 +26,20 @@ def leaveRejected():
 
 @app.route("/leaveApply")
 def leaveApply():
+    if request.method == 'POST' and 'leave_from' in request.form and 'leave_upto' in request.form and 'leave_resion' in request.form:
+        # Create variables for easy access
+        leaveFrom = request.form['leave_from']
+        leaveUpto = request.form['leave_upto']
+        leaveReason = request.form['leave_reason']
+        # opening database sqlite3
+        db = sqlite3.connect("project.sqlite3")
+        #get cursor object it is responsible for handling database query
+        cursor = db.cursor()
+        #Execute database query
+        cursor.execute('INSERT INTO leaveinfo(leave_from, leave_upto, reason) VALUES(?,?,?)', (leaveFrom, leaveUpto, leaveReason))
+        db.commit()
+        db.close()
+        #corrently working.......
     return render_template('leaveApply.html')
 
 @app.route("/leaveStatus")
@@ -41,17 +55,22 @@ def viewAssignment():
     data=[]
     if 'loggedin' in session:
         user = session['id']
-        print(user)
+        #print(user)
         # We need all the assignment info. for the user so we can display it on the view assignment page
         db = sqlite3.connect("project.sqlite3")
         cursor = db.cursor()
-        cursor.execute('SELECT assignment_id, assignmentinfo.name, assignmentinfo.class, assignmentinfo.faculty_id, dos, upload_date, instruction, file  FROM assignmentinfo INNER JOIN studentinfo ON studentinfo.coordinator_id=assignmentinfo.faculty_id INNER JOIN userinfo ON userinfo.faculty_id=studentinfo.coordinator_id WHERE userinfo.user_id=?',(user,))
-        data = cursor.fetchone()
-        print(data) #for testing purpose.. in CONSOLEs
+        cursor.execute('SELECT assignmentinfo.*, facultyinfo.name, facultyinfo.subject from userinfo inner join studentinfo on studentinfo.student_id = userinfo.student_id inner join assignmentinfo on assignmentinfo.class = studentinfo.class inner join facultyinfo on facultyinfo.class = assignmentinfo.class where userinfo.user_id = ?',(user,))
+        data = cursor.fetchall()
+        # print(data) #for testing purpose.. in CONSOLEs
         db.close()
         if data == None:
             return render_template('viewAssignment.html', data=data)
     return render_template('viewAssignment.html', data=data)
+
+@app.route("/login/downloadFile")
+def downloadFile():
+    print("downloaded.....")
+    return("<h1>Assignment file</h1>")
 
 @app.route("/home/assignment-Update")
 def assignmentUpdate():
@@ -217,8 +236,11 @@ def profile():
         db.commit()
         #close the database connection
         db.close()
-        # Show the profile page with account info
-        return render_template('profile.html', account=account)
+        if account[4] == "faculty":
+            return render_template('profile.html', account=account)
+        elif account[4] == "student":
+            return render_template('studentProfile.html', account=account)
+        #return render_template('profile.html', account=account)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
