@@ -75,28 +75,36 @@ def leaveStatus():
         return render_template('leaveStatus.html', data=data)
     return redirect(url_for('login'))
 
-# faculty handle assignment - working
-@app.route("/home/assignment-Create")
+# faculty handle assignment - done
+@app.route("/home/assignment-Create", methods=['GET', 'POST'])
 def assignmentCreate():
-    if request.method == 'POST' and 'assignmentName' in request.form and 'submissionDate' in request.form and 'class' in request.form and 'note' in request.form and 'file' in request.form:
-        # Create variables for easy access
-        name = request.form['assignmentName']
-        dos = request.form['submissionDate']
-        classData = request.form['class']
-        note = request.form['note']
-        fileData = request.form['file']
-        upload_date = date.today()
-        # opening database sqlite3
-        db = sqlite3.connect("project.sqlite3")
-        #get cursor object it is responsible for handling database query
-        cursor = db.cursor()
-        #Execute database query
-        cursor.execute('INSERT INTO assignmentinfo(name, file, dos, upload_date, class, instruction, faculty_id) VALUES(?,?,?,?,?,?,?)', (name, fileData, dos, upload_date, classData, note, session['id']),)
-        db.commit()
-        db.close()
-        print(cursor.lastrowid, "INSERTED DATA at ASSIGNMENT TABLE")
-        return render_template('createAssignment', msg = msg)
+    msg = 'Assignment is successfully created..'
+    if request.method == 'POST':
+        if 'loggedin' in session:
+            # Create variables for easy access
+            name = request.form['assignmentName']
+            dos = request.form['submissionDate']
+            classData = request.form['class']
+            note = request.form['note']
+            fileData = request.form['file']
+            upload_date = date.today()
+            # opening database sqlite3
+            db = sqlite3.connect("project.sqlite3")
+            #get cursor object it is responsible for handling database query
+            cursor = db.cursor()
+            userName = session['username']
+            cursor.execute('SELECT faculty_id FROM userinfo WHERE USERNAME = ?', (userName,))
+            facultyID = cursor.fetchone()
+            fID = facultyID[0]
+            print(fID, "faculty id is retrieve.................................")
+            #Execute database query
+            cursor.execute('INSERT INTO assignmentinfo(name, file, dos, upload_date, class, instruction, faculty_id) VALUES(?,?,?,?,?,?,?)', (name, fileData, dos, upload_date, classData, note, fID),)
+            db.commit()
+            db.close()
+            #print(cursor.lastrowid, "INSERTED DATA at ASSIGNMENT TABLE")
+            return render_template('createAssignment.html', msg = msg)
         #corrently working.......
+        return redirect(url_for('login'))
     return render_template('createAssignment.html')
 
 # student view - done

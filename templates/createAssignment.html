@@ -4,28 +4,28 @@
 
 {% block content %}
 <h2>Assignment Creation Wizard!</h2>
-<div>
+<div> {{ msg }}
     <table>
-        <form action="{{url_for('assignmentCreate') }}" method="POST">
+        <form method="POST">
             <tr>
                 <td>Assignment Name</td>
-                <td><input type="text" id="assignmentName" placeholder="enter assignment title" maxlength="80"></td>
+                <td><input type="text"  name="assignmentName" id="assignmentName" placeholder="enter assignment title" maxlength="80"></td>
             </tr>
             <tr>
                 <td>Submission Date</td>
-                <td><input type="date" id="submissionDate" placeholder="enter date in dd-mm-yyyy formate"></td>
+                <td><input type="date" name="submissionDate" id="submissionDate" placeholder="enter date in dd-mm-yyyy formate"></td>
             </tr>
             <tr>
                 <td>Class</td>
-                <td><input type="text" id="class" placeholder="enter class name"></td>
+                <td><input type="text" name="class" id="class" placeholder="enter class name"></td>
             </tr>
             <tr>
                 <td>Message / NOTE</td>
-                <td><input type="text" id="note" placeholder="enter any important message"></td>
+                <td><input type="text" name="note" id="note" placeholder="enter any important message"></td>
             </tr>
             <tr>
                 <td>Upload docs</td>
-                <td><input type="file" id="file"></td>
+                <td><input type="file" name="file" id="file"></td>
             </tr>
             <tr>
                 <td><span hidden></span></td>
