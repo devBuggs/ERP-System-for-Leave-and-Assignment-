@@ -5,6 +5,7 @@
 {% block content %}
 <h2>Assignment deletion Wizard!</h2>
 <div>
+    <!--
     <table>
         <form action="" method="POST">
             <tr>
@@ -14,6 +15,49 @@
             </tr>
         </form>
     </table>
+    <hr>-->
+    {% if data %}
+    <div>
+        {% for tuple in data %}
+        <table>{{ msgdata }}
+            <tr>
+                <td>Assignment ID:</td>
+                <td>{{ tuple[5] }}</td>
+            </tr>
+            <tr>
+                <td>Assignment Name:</td>
+                <td>{{ tuple[0] }}</td>
+            </tr>
+            <tr>
+                <td>Assigned Date:</td>
+                <td>{{ tuple[1] }}</td>
+            </tr>
+            <tr>
+                <td>Submission:</td>
+                <td>{{ tuple[2] }}</td>
+            </tr>
+            <tr>
+                <td>class:</td>
+                <td>{{ tuple[3] }}</td>
+            </tr>
+            <tr>
+                <td>Instruction:</td>
+                <td>{{ tuple[4] }}</td>
+                <td>
+                    <!-- delete assignment Button -->
+                    <button type="submit" onclick="window.location.href='{{ url_for('deleteNow', objID=tuple[5]) }}';" style="padding: 5px; border:hidden;">Delete Assignment</button>
+                </td>
+            </tr>
+        </table>
+        <hr>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div>
+        <b>No assignment found...</b>
+    </div>
+    {% endif %}
+
 </div>
 
 

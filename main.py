@@ -12,17 +12,29 @@ app.secret_key = os.urandom(24)
 def main():
     return render_template('index.html')
 
-@app.route("/home/leave-Approved")
-def leaveApproved():
+@app.route("/home/leave-Approve")
+def leaveApprove():
     return ("<h1>Leave Approved Fragment!</h1>")
 
-@app.route("/home/leave-Pending")
-def leavePending():
-    return ("<div><h1>Leave Pending Fragment!</h1></div")
-
 @app.route("/home/leave-Rejected")
-def leaveRejected():
+def allLeaveStatus():
     return ("<h1>Leave Rejected Fragment!</h1>")
+    '''
+    if request.method == 'GET':
+        if 'loggedin' in session:
+            user = session['id']
+            #print(user)
+            # We need all the assignment info. for the user so we can display it on the view and delete it
+            db = sqlite3.connect("project.sqlite3")
+            cursor = db.cursor()
+            cursor.execute('SELECT assignmentinfo.name, assignmentinfo.upload_date, assignmentinfo.dos, assignmentinfo.class, assignmentinfo.instruction, assignmentinfo.assignment_id FROM userinfo INNER JOIN assignmentinfo ON userinfo.faculty_id = assignmentinfo.faculty_id WHERE user_id=?',(user,))
+            data = cursor.fetchall()
+            print(data) #for testing purpose.. in CONSOLEs
+            db.close()
+            if data != None:
+                return render_template('deleteAssignment.html', data=data)
+        return redirect(url_for('login'))
+    return render_template('deleteAssignment.html')'''
 
 @app.route("/login/leaveApply", methods=['GET', 'POST'])
 def leaveApply():
@@ -65,6 +77,23 @@ def leaveStatus():
 
 @app.route("/home/assignment-Create")
 def assignmentCreate():
+    if request.method == 'POST' and 'leave_from' in request.form and 'leave_upto' in request.form and 'leave_reason' in request.form:
+        # Create variables for easy access
+        leaveFrom = request.form['leave_from']
+        leaveUpto = request.form['leave_upto']
+        leaveReason = request.form['leave_reason']
+        # opening database sqlite3
+        db = sqlite3.connect("project.sqlite3")
+        #get cursor object it is responsible for handling database query
+        cursor = db.cursor()
+        #Execute database query
+        #cursor.execute('INSERT INTO leaveinfo(leave_from, leave_upto, reason) VALUES(?,?,?)', (leaveFrom, leaveUpto, leaveReason),)
+        #db.commit()
+        #db.close()
+        print(cursor.lastrowid)
+        print('Yeeeepppppppppppppppppppeeeeeeeeeee')
+        return render_template('leaveApply.html', msg = msg)
+        #corrently working.......
     return render_template('createAssignment.html')
 
 @app.route("/viewAssignment")
@@ -125,7 +154,41 @@ def assignmentUpdate():
 
 @app.route("/home/assignment-Delete")
 def assignmentDelete():
+    if request.method == 'GET':
+        if 'loggedin' in session:
+            user = session['id']
+            #print(user)
+            # We need all the assignment info. for the user so we can display it on the view and delete it
+            db = sqlite3.connect("project.sqlite3")
+            cursor = db.cursor()
+            cursor.execute('SELECT assignmentinfo.name, assignmentinfo.upload_date, assignmentinfo.dos, assignmentinfo.class, assignmentinfo.instruction, assignmentinfo.assignment_id FROM userinfo INNER JOIN assignmentinfo ON userinfo.faculty_id = assignmentinfo.faculty_id WHERE user_id=?',(user,))
+            data = cursor.fetchall()
+            print(data) #for testing purpose.. in CONSOLEs
+            db.close()
+            if data != None:
+                return render_template('deleteAssignment.html', data=data)
+        return redirect(url_for('login'))
     return render_template('deleteAssignment.html')
+
+@app.route("/deleteNow/id/<int:objID>', methods=['GET','POST']")
+def deleteNow(objID):
+    print(objID, 'assignment id receved.')
+    if request.method == 'GET':
+        if 'loggedin' in session:
+            #errorMsg = 'Unable to delete this assignment...'
+            msgdata = 'Assignment deleted successfully...'
+            # We need all the assignment info. for the user so we can display it on the view and delete it
+            db = sqlite3.connect("project.sqlite3")
+            cursor = db.cursor()
+            cursor.execute('DELETE FROM assignmentinfo WHERE assignment_id =?',(objID,))
+            #data = cursor.fetchone()
+            db.commit()
+            #print(data) #for testing purpose.. in CONSOLE
+            db.close()
+            print(objID,"no assignment is deleted.")
+            msgdata = 'Assignment deleted successfully...'
+            return redirect(url_for('assignmentDelete', value=msgdata)) #render_template('deleteAssignment.html', value=msgdata)
+        return redirect(url_for('login'))
 
 @app.route("/home/students")
 def allStudents():

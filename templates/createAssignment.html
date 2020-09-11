@@ -6,22 +6,22 @@
 <h2>Assignment Creation Wizard!</h2>
 <div>
     <table>
-        <form action="" method="POST">
+        <form action="{{url_for('assignmentCreate') }}" method="POST">
             <tr>
                 <td>Assignment Name</td>
-                <td><input type="text" placeholder="enter assignment title" maxlength="80"></td>
+                <td><input type="text" id="assignmentName" placeholder="enter assignment title" maxlength="80"></td>
             </tr>
             <tr>
                 <td>Submission Date</td>
-                <td><input type="date" placeholder="enter date in dd-mm-yyyy formate"></td>
+                <td><input type="date" id="submissionDate" placeholder="enter date in dd-mm-yyyy formate"></td>
             </tr>
             <tr>
                 <td>Subject</td>
-                <td><input type="text" placeholder="enter subject name"></td>
+                <td><input type="text" id="subject" placeholder="enter subject name"></td>
             </tr>
             <tr>
                 <td>Message / NOTE</td>
-                <td><input type="text" placeholder="enter any important message"></td>
+                <td><input type="text" id="note" placeholder="enter any important message"></td>
             </tr>
             <tr>
                 <td>Upload docs</td>
