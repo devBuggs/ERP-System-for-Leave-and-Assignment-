@@ -2,6 +2,7 @@ from flask import Flask, render_template, redirect, url_for, request, session
 import sqlite3, os
 import re
 import random
+from datetime import date 
 
 app =Flask(__name__)
 
@@ -12,58 +13,56 @@ app.secret_key = os.urandom(24)
 def main():
     return render_template('index.html')
 
+# faculty handle
 @app.route("/home/leave-Approve")
 def leaveApprove():
     return ("<h1>Leave Approved Fragment!</h1>")
 
+# faculty handle
 @app.route("/home/leave-Rejected")
 def allLeaveStatus():
-    return ("<h1>Leave Rejected Fragment!</h1>")
-    '''
-    if request.method == 'GET':
-        if 'loggedin' in session:
-            user = session['id']
-            #print(user)
-            # We need all the assignment info. for the user so we can display it on the view and delete it
-            db = sqlite3.connect("project.sqlite3")
-            cursor = db.cursor()
-            cursor.execute('SELECT assignmentinfo.name, assignmentinfo.upload_date, assignmentinfo.dos, assignmentinfo.class, assignmentinfo.instruction, assignmentinfo.assignment_id FROM userinfo INNER JOIN assignmentinfo ON userinfo.faculty_id = assignmentinfo.faculty_id WHERE user_id=?',(user,))
-            data = cursor.fetchall()
-            print(data) #for testing purpose.. in CONSOLEs
-            db.close()
-            if data != None:
-                return render_template('deleteAssignment.html', data=data)
-        return redirect(url_for('login'))
-    return render_template('deleteAssignment.html')'''
-
+    return ("<h1>Leave all-Leave-Status Fragment!</h1>")
+    
+# student request - done
 @app.route("/login/leaveApply", methods=['GET', 'POST'])
 def leaveApply():
     msg = 'Leave request is successfully submitted'
     if request.method == 'POST' and 'leave_from' in request.form and 'leave_upto' in request.form and 'leave_reason' in request.form:
-        # Create variables for easy access
-        leaveFrom = request.form['leave_from']
-        leaveUpto = request.form['leave_upto']
-        leaveReason = request.form['leave_reason']
-        # opening database sqlite3
-        db = sqlite3.connect("project.sqlite3")
-        #get cursor object it is responsible for handling database query
-        cursor = db.cursor()
-        #Execute database query
-        cursor.execute('INSERT INTO leaveinfo(leave_from, leave_upto, reason) VALUES(?,?,?)', (leaveFrom, leaveUpto, leaveReason),)
-        db.commit()
-        db.close()
-        print(cursor.lastrowid)
-        print('Yeeeepppppppppppppppppppeeeeeeeeeee')
-        return render_template('leaveApply.html', msg = msg)
+        if 'loggedin' in session:
+            # Create variables for easy access
+            leaveFrom = request.form['leave_from']
+            leaveUpto = request.form['leave_upto']
+            leaveReason = request.form['leave_reason']
+            approve = 0
+            pending = 1
+            userName = session['username']
+            # opening database sqlite3
+            db = sqlite3.connect("project.sqlite3")
+            #get cursor object it is responsible for handling database query
+            cursor = db.cursor()
+            # checking the student_id via sql Query
+            cursor.execute('SELECT student_id FROM userinfo WHERE username = ?', (userName,))
+            studentID = cursor.fetchone()
+            sID = studentID[0]
+            print(sID)
+            #Execute database query
+            cursor.execute('INSERT INTO leaveinfo(leave_from, leave_upto, reason, student_id, is_approve, is_pending) VALUES(?,?,?,?,?,?)', (leaveFrom, leaveUpto, leaveReason, sID, approve, pending),)
+            print("leave apply is register and Database is commited.........")
+            db.commit()
+            db.close()
+            print(cursor.lastrowid)
+            print('Yeeeepppppppppppppppppppeeeeeeeeeee')
+            return render_template('leaveApply.html', msg = msg)
         #corrently working.......
+        return redirect(url_for('login'))
     return render_template('leaveApply.html')
 
+# student leave status - done
 @app.route("/leaveStatus")
 def leaveStatus():
     data=[]
     if 'loggedin' in session:
         user = session['id']
-        #print(user)
         # We need all the leave info. for the user so we can display it on the view assignment page
         db = sqlite3.connect("project.sqlite3")
         cursor = db.cursor()
@@ -71,31 +70,36 @@ def leaveStatus():
         data = cursor.fetchall()
         print(data) #for testing purpose.. in CONSOLEs
         db.close()
-        if data == None:
-            return render_template('leaveStatus.html', data=data)
-    return render_template('leaveStatus.html', data=data)
+        #if data != None:
+            #return render_template('leaveStatus.html', data=data)
+        return render_template('leaveStatus.html', data=data)
+    return redirect(url_for('login'))
 
+# faculty handle assignment - working
 @app.route("/home/assignment-Create")
 def assignmentCreate():
-    if request.method == 'POST' and 'leave_from' in request.form and 'leave_upto' in request.form and 'leave_reason' in request.form:
+    if request.method == 'POST' and 'assignmentName' in request.form and 'submissionDate' in request.form and 'class' in request.form and 'note' in request.form and 'file' in request.form:
         # Create variables for easy access
-        leaveFrom = request.form['leave_from']
-        leaveUpto = request.form['leave_upto']
-        leaveReason = request.form['leave_reason']
+        name = request.form['assignmentName']
+        dos = request.form['submissionDate']
+        classData = request.form['class']
+        note = request.form['note']
+        fileData = request.form['file']
+        upload_date = date.today()
         # opening database sqlite3
         db = sqlite3.connect("project.sqlite3")
         #get cursor object it is responsible for handling database query
         cursor = db.cursor()
         #Execute database query
-        #cursor.execute('INSERT INTO leaveinfo(leave_from, leave_upto, reason) VALUES(?,?,?)', (leaveFrom, leaveUpto, leaveReason),)
-        #db.commit()
-        #db.close()
-        print(cursor.lastrowid)
-        print('Yeeeepppppppppppppppppppeeeeeeeeeee')
-        return render_template('leaveApply.html', msg = msg)
+        cursor.execute('INSERT INTO assignmentinfo(name, file, dos, upload_date, class, instruction, faculty_id) VALUES(?,?,?,?,?,?,?)', (name, fileData, dos, upload_date, classData, note, session['id']),)
+        db.commit()
+        db.close()
+        print(cursor.lastrowid, "INSERTED DATA at ASSIGNMENT TABLE")
+        return render_template('createAssignment', msg = msg)
         #corrently working.......
     return render_template('createAssignment.html')
 
+# student view - done
 @app.route("/viewAssignment")
 def viewAssignment():
     data=[]
@@ -113,6 +117,7 @@ def viewAssignment():
             return render_template('viewAssignment.html', data=data)
     return render_template('viewAssignment.html', data=data)
 
+# student download btn - done (file-picker)
 @app.route("/login/downloadFile/<assign_id>", methods=['GET'])
 def downloadFile(assign_id):
     print("In downloadFile function")
@@ -148,10 +153,12 @@ def downloadFile(assign_id):
     return("<h2>Assignment file downloaded at location "+ file_path +"</h2>")
     # return redirect(url_for('viewAssignment'))
 
+# faculty handle
 @app.route("/home/assignment-Update")
 def assignmentUpdate():
     return render_template('updateAssignment.html')
 
+# faculty handle - done
 @app.route("/home/assignment-Delete")
 def assignmentDelete():
     if request.method == 'GET':
@@ -170,6 +177,7 @@ def assignmentDelete():
         return redirect(url_for('login'))
     return render_template('deleteAssignment.html')
 
+# faculty handle - done
 @app.route("/deleteNow/id/<int:objID>', methods=['GET','POST']")
 def deleteNow(objID):
     print(objID, 'assignment id receved.')
