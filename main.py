@@ -13,10 +13,22 @@ app.secret_key = os.urandom(24)
 def main():
     return render_template('index.html')
 
-# faculty handle
+# faculty handle - working
 @app.route("/home/leave-Approve")
 def leaveApprove():
-    return ("<h1>Leave Approved Fragment!</h1>")
+    data=[]
+    if 'loggedin' in session:
+        user = session['faculty_id']
+        # We need all the leave info. and student info for the user so we can display it on the view Leave approve page
+        db = sqlite3.connect("project.sqlite3")
+        cursor = db.cursor()
+        cursor.execute('SELECT studentinfo.name, studentinfo.student_id, studentinfo.class, studentinfo.course, studentinfo.batch, leaveinfo.leave_from, leaveinfo.leave_upto, leaveinfo.reason, leaveinfo.is_approve from leaveinfo INNER JOIN studentinfo ON studentinfo.student_id = leaveinfo.student_id WHERE coordinator_id=? AND is_pending=1;',(user,))
+        data = cursor.fetchall()
+        print(data) #for testing purpose.. in CONSOLEs
+        db.close()
+        return render_template('leaveApprove.html', data=data)
+    return redirect(url_for('login'))
+    #return ("<h1>Leave Approved Fragment!</h1>")
 
 # faculty handle - done
 @app.route("/home/leave-Status")
@@ -230,7 +242,7 @@ def reportDownload():
 def reportReset():
     return ("<h1>Student Report Reset Module!</h1>")
 
-# http://localhost/login/ - this will be the login page, we need to use both GET and POST requests
+# http://localhost/login/ - this will be the login page, we need to use both GET and POST requests - done
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
     # Output message if something goes wrong...
@@ -273,7 +285,7 @@ def login():
     # Show the login form with message (if any)
     return render_template('index.html', msg=msgError)
 
-# http://localhost/login/logout - this will be the logout page
+# http://localhost/login/logout - this will be the logout page - done
 @app.route('/login/logout')
 def logout():
     # Remove session data, this will log the user out
@@ -283,7 +295,7 @@ def logout():
    # Redirect to login page
    return redirect(url_for('login'))
 
-# http://localhost/login/register - this will be the registration page, we need to use both GET and POST requests
+# http://localhost/login/register - this will be the registration page, we need to use both GET and POST requests - done
 @app.route('/login/register', methods=['GET', 'POST'])
 def register():
     # Output message if something goes wrong...
@@ -335,7 +347,7 @@ def register():
     # Show registration form with message (if any)
     return render_template('register.html', msg=msg)
 
-# http://localhost/login/home - this will be the home page, only accessible for logged-in users
+# http://localhost/login/home - this will be the home page, only accessible for logged-in users - done
 @app.route('/login/home', methods=['GET', 'POST'])
 def home():
     account=[]
@@ -357,7 +369,7 @@ def home():
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
-# http://localhost/login/profile - this will be the profile page, only accessible for logged-in users
+# http://localhost/login/profile - this will be the profile page, only accessible for logged-in users - done
 @app.route('/login/profile', methods=['GET', 'POST'])
 def profile():
     account = []

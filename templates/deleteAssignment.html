@@ -43,9 +43,12 @@
             <tr>
                 <td>Instruction:</td>
                 <td>{{ tuple[4] }}</td>
+            </tr>
+            <tr>
+                <td>Make Action:</td>
                 <td>
                     <!-- delete assignment Button -->
-                    <button type="submit" onclick="window.location.href='{{ url_for('deleteNow', objID=tuple[5]) }}';" style="padding: 5px; border:hidden;">Delete Assignment</button>
+                    <button class="button button3" type="submit" onclick="window.location.href='{{ url_for('deleteNow', objID=tuple[5]) }}';">Delete Assignment</button>
                 </td>
             </tr>
         </table>

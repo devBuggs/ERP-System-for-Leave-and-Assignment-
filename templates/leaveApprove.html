@@ -1,39 +1,59 @@
 {% extends 'layout.html' %}
 
-{% block title %}leave approve{% endblock %}
+{% block title %}Leave Status{% endblock %}
 
 {% block content %}
-<h2>Leave Request Wizard!</h2>
+<h2>Leave Approve Wizard!</h2>
+{% if data %}
 <div>
-    <table>
-        <form action="/home/leave-Approve" method="POST">
-            <tr>
-                <td>Applicant Name</td>
-                <td><input type="text" placeholder="enter your name" maxlength="80" required></td>
-            </tr>
-            <tr>
-                <td>Email Address</td>
-                <td><input type="email" placeholder="enter your registered email" required></td>
-            </tr>
-            <tr>
-                <td>Leave Reason</td>
-                <td><input type="text" placeholder="enter leave reason.."></td>
-            </tr>
-            <tr>
-                <td>Leave from </td>
-                <td><input type="date" placeholder="dd-mm-yyyy"></td>
-            </tr>
-            <tr>
-                <td>Till date</td>
-                <td><input type="date" placeholder="dd-mm-yyyy"></td>
-            </tr>
-            <tr>
-                <td><span hidden></span></td>
-                <td><button type="submit" style="padding: 5px; border:hidden;">SUBMIT</button></td>
-            </tr>
-        </form>
+    {% for tuple in data %}
+    <table>{{ error }}
+        <tr>
+            <td>Name:</td>
+            <td>{{ tuple[0] }}</td>
+            <td><strong>Student ID:</strong></td>
+            <td>{{ tuple[1] }}</td>
+        </tr>
+        <tr>
+            <td>Class: </td>
+            <td>{{ tuple[2] }}</td>
+        </tr>
+        <tr>
+            <td>Course: </td>
+            <td>{{ tuple[3] }}</td>
+            <td><strong>Batch:</strong></td>
+            <td>{{ tuple[4] }}</td>
+        </tr>
+        <tr>
+            <td>Leave From:</td>
+            <td>{{ tuple[5] }}</td>
+            <td><strong>Leave Upto:</strong></td>
+            <td>{{ tuple[6] }}</td>
+        </tr>
+        <tr>
+            <td>Reason:</td>
+            <td>{{ tuple[7] }}</td>
+            <td><strong>Status:</strong></td>
+            <td>{% if tuple[8] == '1' %}
+                <b>Leave approved <i class="fas fa-thumbs-up"></i></b>
+                {% else %}
+                <b>pending <i class="fas fa-exclamation"></i></b>
+                {% endif %}
+            </td>
+        </tr>
+        </tr>
+        <tr>
+            <td>Make Action</td>
+            <td><button class="button button1">Approve</button></td>
+            <td><button class="button button3">Reject</button></td>
+        </tr>
     </table>
+    <hr>
+    {% endfor %}
 </div>
-
-
+{% else %}
+<div>
+    <b>No leave application found...</b>
+</div>
+{% endif %}
 {% endblock %}
