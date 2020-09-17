@@ -19,7 +19,7 @@ def leaveApprove():
     return ("<h1>Leave Approved Fragment!</h1>")
 
 # faculty handle
-@app.route("/home/leave-Rejected")
+@app.route("/home/leave-Status")
 def allLeaveStatus():
     return ("<h1>Leave all-Leave-Status Fragment!</h1>")
     
@@ -161,9 +161,6 @@ def downloadFile(assign_id):
     return("<h2>Assignment file downloaded at location "+ file_path +"</h2>")
     # return redirect(url_for('viewAssignment'))
 
-# faculty handle
-@app.route("/home/assignment-Update")
-def assignmentUpdate():
     return render_template('updateAssignment.html')
 
 # faculty handle - done
