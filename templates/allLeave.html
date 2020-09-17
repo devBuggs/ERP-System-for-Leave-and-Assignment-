@@ -1,0 +1,55 @@
+{% extends 'layout.html' %}
+
+{% block title %}Leave Status{% endblock %}
+
+{% block content %}
+<h2>All Student's - Leave application!</h2>
+{% if data %}
+<div>
+{% for tuple in data %}
+    <table>{{ error }}
+        <tr>
+            <td>Name:</td>
+            <td>{{ tuple[0] }}</td>
+            <td><strong>Student ID:</strong></td>
+            <td>{{ tuple[1] }}</td>
+        </tr>
+        <tr>
+            <td>Class: </td>
+            <td>{{ tuple[2] }}</td>
+        </tr>
+        <tr>
+            <td>Course: </td>
+            <td>{{ tuple[3] }}</td>
+            <td><strong>Batch:</strong></td>
+            <td>{{ tuple[4] }}</td>
+        </tr>
+        <tr>
+            <td>Leave From:</td>
+            <td>{{ tuple[5] }}</td>
+            <td><strong>Leave Upto:</strong></td>
+            <td>{{ tuple[6] }}</td>
+        </tr>
+        <tr>
+            <td>Reason:</td>
+            <td>{{ tuple[7] }}</td>
+        </tr>   
+        <tr>
+            <td>Status:</td>                
+            <td>{% if tuple[8] == '1' %}
+                    <b>Leave approved <i class="fas fa-thumbs-up"></i></b>
+                {% else %}
+                    <b>pending <i class="fas fa-exclamation"></i></b>
+                {% endif %}
+            </td>
+        </tr>                                  
+    </table>
+    <hr>
+{% endfor %}
+</div>
+{% else %}
+<div>
+    <b>No leave application found...</b>
+</div>
+{% endif %}
+{% endblock %}

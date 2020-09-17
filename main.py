@@ -18,10 +18,21 @@ def main():
 def leaveApprove():
     return ("<h1>Leave Approved Fragment!</h1>")
 
-# faculty handle
+# faculty handle - done
 @app.route("/home/leave-Status")
 def allLeaveStatus():
-    return ("<h1>Leave all-Leave-Status Fragment!</h1>")
+    data=[]
+    if 'loggedin' in session:
+        user = session['faculty_id']
+        # We need all the leave info. and student info for the user so we can display it on the view status page
+        db = sqlite3.connect("project.sqlite3")
+        cursor = db.cursor()
+        cursor.execute('SELECT studentinfo.name, studentinfo.student_id, studentinfo.class, studentinfo.course, studentinfo.batch, leaveinfo.leave_from, leaveinfo.leave_upto, leaveinfo.reason, leaveinfo.is_approve from leaveinfo INNER JOIN studentinfo ON studentinfo.student_id = leaveinfo.student_id WHERE coordinator_id=?',(user,))
+        data = cursor.fetchall()
+        print(data) #for testing purpose.. in CONSOLEs
+        db.close()
+        return render_template('allLeave.html', data=data)
+    return redirect(url_for('login'))
     
 # student request - done
 @app.route("/login/leaveApply", methods=['GET', 'POST'])
@@ -44,14 +55,14 @@ def leaveApply():
             cursor.execute('SELECT student_id FROM userinfo WHERE username = ?', (userName,))
             studentID = cursor.fetchone()
             sID = studentID[0]
-            print(sID)
+            print(sID) # for testing only............................. _devBuggs
             #Execute database query
             cursor.execute('INSERT INTO leaveinfo(leave_from, leave_upto, reason, student_id, is_approve, is_pending) VALUES(?,?,?,?,?,?)', (leaveFrom, leaveUpto, leaveReason, sID, approve, pending),)
-            print("leave apply is register and Database is commited.........")
+            print("leave apply is register and Database is commited.........") # for testing only............................. _devBuggs
             db.commit()
             db.close()
-            print(cursor.lastrowid)
-            print('Yeeeepppppppppppppppppppeeeeeeeeeee')
+            print(cursor.lastrowid) # for testing only............................. _devBuggs
+            print('Yeeeepppppppppppppppppppeeeeeeeeeee') # for testing only............................. _devBuggs
             return render_template('leaveApply.html', msg = msg)
         #corrently working.......
         return redirect(url_for('login'))
@@ -67,8 +78,8 @@ def leaveStatus():
         db = sqlite3.connect("project.sqlite3")
         cursor = db.cursor()
         cursor.execute('SELECT leaveinfo.* FROM leaveinfo INNER JOIN userinfo ON userinfo.student_id = leaveinfo.student_id where userinfo.user_id=?',(user,))
-        data = cursor.fetchall()
-        print(data) #for testing purpose.. in CONSOLEs
+        data = cursor.fetchall() # for testing only............................. _devBuggs
+        print(data) # for testing only............................. _devBuggs
         db.close()
         #if data != None:
             #return render_template('leaveStatus.html', data=data)
@@ -96,7 +107,7 @@ def assignmentCreate():
             cursor.execute('SELECT faculty_id FROM userinfo WHERE USERNAME = ?', (userName,))
             facultyID = cursor.fetchone()
             fID = facultyID[0]
-            print(fID, "faculty id is retrieve.................................")
+            print(fID, "faculty id is retrieve.................................") # for testing only............................. _devBuggs
             #Execute database query
             cursor.execute('INSERT INTO assignmentinfo(name, file, dos, upload_date, class, instruction, faculty_id) VALUES(?,?,?,?,?,?,?)', (name, fileData, dos, upload_date, classData, note, fID),)
             db.commit()
@@ -128,7 +139,7 @@ def viewAssignment():
 # student download btn - done (file-picker)
 @app.route("/login/downloadFile/<assign_id>", methods=['GET'])
 def downloadFile(assign_id):
-    print("In downloadFile function")
+    print("In downloadFile function") # for testing only............................. _devBuggs
     if request.method == 'GET':
         # print(assign_id)
         try:
@@ -244,6 +255,9 @@ def login():
             session['loggedin'] = True
             session['id'] = account[0]
             session['username'] = account[1]
+            session['email'] = account[3]
+            session['student_id'] = account[5]
+            session['faculty_id'] = account[6]
 
             #checking usertype
             if account[4] == "faculty":
